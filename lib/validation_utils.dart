@@ -15,8 +15,8 @@ class ValidationUtils {
       return TextFieldError("Must be $max character long");
     } else if (max != null && value.value.length > max) {
       return TextFieldError("Max $max characters allowed");
-    } else if (min != null && value.value.length > min) {
-      return TextFieldError("Min $min characters allowed");
+    } else if (min != null && value.value.length < min) {
+      return TextFieldError("Min $min characters required");
     } else if (value.value.isEmpty) {
       return TextFieldError("Enter valid");
     }

@@ -87,6 +87,7 @@
     "key": "address",
     "type": "text_field",
     "subtype": "text",
+    "min": 10,
     "placeholder": "Enter your address",
     "initial_value": null
   },
