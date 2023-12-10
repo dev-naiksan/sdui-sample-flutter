@@ -1,0 +1,220 @@
+[
+  {
+    "type": "text",
+    "key": "title",
+    "subtype": "title",
+    "initial_value": "Personal details"
+  },
+  {
+    "key": "name",
+    "type": "text_field",
+    "subtype": "text",
+    "placeholder": "Enter your name",
+    "initial_value": "Sanket"
+  },
+  {
+    "key": "email",
+    "type": "text_field",
+    "subtype": "email",
+    "placeholder": "Enter your email id",
+    "initial_value": null
+  },
+  {
+    "key": "password",
+    "type": "password_confirmation",
+    "subtype": "password",
+    "placeholder": "Enter your password",
+    "placeholder2": "Confirm your password",
+    "initial_value": "Aa#12346;"
+  },
+  {
+    "key": "age",
+    "type": "text_field",
+    "subtype": "integer",
+    "placeholder": "Enter your age",
+    "initial_value": null
+  },
+  {
+    "key": "gender",
+    "type": "selection",
+    "subtype": "single",
+    "placeholder": "Select your gender",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "male",
+        "value": "Male",
+        "selected": true
+      },
+      {
+        "key": "female",
+        "value": "Female",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "key": "more_title",
+    "subtype": "title",
+    "initial_value": "More details"
+  },
+  {
+    "key": "interest",
+    "type": "selection",
+    "subtype": "multi",
+    "placeholder": "Select your interest",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "gym",
+        "value": "Gym",
+        "selected": false
+      },
+      {
+        "key": "fishing",
+        "value": "Fishing",
+        "selected": true
+      },
+      {
+        "key": "cycling",
+        "value": "Cycling",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "key": "address",
+    "type": "text_field",
+    "subtype": "text",
+    "placeholder": "Enter your address",
+    "initial_value": null
+  },
+  {
+    "key": "pincode",
+    "type": "text_field",
+    "subtype": "integer",
+    "min": 6,
+    "max": 6,
+    "placeholder": "Enter your pincode",
+    "initial_value": null
+  },
+  {
+    "key": "weight",
+    "type": "text_field",
+    "subtype": "decimal",
+    "placeholder": "Enter your weight",
+    "initial_value": null
+  },
+  {
+    "key": "body_type",
+    "type": "selection",
+    "subtype": "single",
+    "placeholder": "Select your body type",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "skinny",
+        "value": "Skinny",
+        "selected": true
+      },
+      {
+        "key": "muscular",
+        "value": "Muscular",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "key": "workout_days",
+    "type": "selection",
+    "subtype": "multi",
+    "placeholder": "Days on which you workout",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "mon",
+        "value": "Monday",
+        "selected": false
+      },
+      {
+        "key": "tue",
+        "value": "Tuesday",
+        "selected": true
+      },
+      {
+        "key": "wed",
+        "value": "Wednesday",
+        "selected": false
+      },
+      {
+        "key": "thu",
+        "value": "Thursday",
+        "selected": false
+      },
+      {
+        "key": "fri",
+        "value": "Friday",
+        "selected": false
+      },
+      {
+        "key": "sat",
+        "value": "Saturday",
+        "selected": false
+      },
+      {
+        "key": "sun",
+        "value": "Sunday",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "key": "workouts",
+    "type": "selection",
+    "subtype": "dropdown_multi",
+    "placeholder": "Your favorite workouts",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "biceps_curl",
+        "value": "Biceps Curl",
+        "selected": false
+      },
+      {
+        "key": "bench_press",
+        "value": "Bench Press",
+        "selected": false
+      },
+      {
+        "key": "pull_ups",
+        "value": "Pull ups",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "key": "workout_timings",
+    "type": "selection",
+    "subtype": "dropdown_single",
+    "placeholder": "What time do you workout?",
+    "initial_value": null,
+    "options": [
+      {
+        "key": "morning",
+        "value": "Morning",
+        "selected": false
+      },
+      {
+        "key": "afternoon",
+        "value": "Afternoon",
+        "selected": false
+      },
+      {
+        "key": "evening",
+        "value": "Evening",
+        "selected": false
+      }
+    ]
+  }
+]
