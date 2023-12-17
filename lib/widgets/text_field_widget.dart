@@ -67,9 +67,12 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       controller: _controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-          errorText: widget.error?.value,
-          hintText: widget.model.placeholder,
-          counter: null),
+        border: const OutlineInputBorder(borderSide: BorderSide()),
+        errorText: widget.error?.value,
+        labelText: widget.model.placeholder,
+        hintText: widget.model.placeholder,
+        counter: null,
+      ),
       inputFormatters: [
         LengthLimitingTextInputFormatter(widget.model.max),
         FilteringTextInputFormatter.singleLineFormatter,

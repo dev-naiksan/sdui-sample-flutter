@@ -6,6 +6,12 @@ class TextFieldError extends FieldError {
   TextFieldError(this.value);
 }
 
+class DateFieldError extends FieldError {
+  final String? value;
+
+  DateFieldError(this.value);
+}
+
 class SelectionError extends FieldError {
   final String? value;
 

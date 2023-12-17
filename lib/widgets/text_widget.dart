@@ -10,12 +10,12 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double textSize;
     FontWeight fontWeight;
-    switch(model.type){
+    switch (model.type) {
       case TextType.title:
-        textSize = 18.0;
+        textSize = 32.0;
         fontWeight = FontWeight.w700;
       case TextType.subtitle:
-        textSize = 16.0;
+        textSize = 18.0;
         fontWeight = FontWeight.w500;
       case TextType.body:
         textSize = 12.0;
@@ -23,10 +23,7 @@ class TextWidget extends StatelessWidget {
     }
     return Text(
       model.defaultValue.value,
-      style: TextStyle(
-        fontSize: textSize,
-        fontWeight: fontWeight
-      ),
+      style: TextStyle(fontSize: textSize, fontWeight: fontWeight),
     );
   }
 }

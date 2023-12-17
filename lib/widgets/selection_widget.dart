@@ -1,8 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
+
 import '../models/notifications.dart';
 import '../models/widget_model.dart';
-import 'package:collection/collection.dart';
 
 class SelectionWidget extends StatelessWidget {
   final SelectionModel model;
@@ -23,8 +24,12 @@ class SelectionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(model.placeholder),
-        if(errorValue != null)
-          Text(errorValue, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.red)),
+        if (errorValue != null)
+          Text(errorValue,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall
+                  ?.copyWith(color: Colors.red)),
         ...model.options.map(
           (e) {
             final selected =

@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:sdui_flutter_sample/models/widget_model.dart';
 
@@ -22,6 +21,23 @@ class TextFieldWidgetNotification extends FieldNotification {
   @override
   String toString() {
     return 'TextFieldWidgetNotification(key=$key, value=$value)';
+  }
+}
+
+class DateFieldWidgetNotification extends FieldNotification {
+  @override
+  final String key;
+  @override
+  final DateFieldValue value;
+
+  DateFieldWidgetNotification({
+    required this.key,
+    required this.value,
+  });
+
+  @override
+  String toString() {
+    return 'DateFieldWidgetNotification(key=$key, value=$value)';
   }
 }
 

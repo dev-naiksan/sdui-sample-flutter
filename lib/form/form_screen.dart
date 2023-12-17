@@ -28,7 +28,7 @@ class FormScreen extends StatelessWidget {
                   controller: notifier.scrollController,
                   padding: EdgeInsets.fromLTRB(
                     24,
-                    MediaQuery.of(context).viewPadding.top,
+                    MediaQuery.of(context).viewPadding.top + 24,
                     24,
                     100,
                   ),

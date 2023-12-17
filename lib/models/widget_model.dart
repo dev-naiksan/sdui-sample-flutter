@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sdui_flutter_sample/extensions.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
 
@@ -23,6 +24,8 @@ sealed class FieldModel {
         return TextModel.fromJson(json);
       case PasswordConfirmationModel.widgetType:
         return PasswordConfirmationModel.fromJson(json);
+      case DateFieldModel.widgetType:
+        return DateFieldModel.fromJson(json);
       default:
         return TextModel(
           key: 'unknown',
@@ -47,6 +50,17 @@ class TextFieldValue extends FieldValue<String> {
 
   @override
   String get raw => value;
+}
+
+class DateFieldValue extends FieldValue<DateTime?> {
+  @override
+  final DateTime? value;
+
+  DateFieldValue(this.value);
+
+  @override
+  String get raw =>
+      value == null ? '' : DateFormat('yyyy-MM-dd').format(value!);
 }
 
 class PasswordConfirmationValue extends FieldValue<String> {
@@ -294,4 +308,61 @@ class PasswordConfirmationModel extends FieldModel {
     required this.defaultValue,
     required this.mandatory,
   });
+}
+
+class DateFieldModel extends FieldModel {
+  static const widgetType = 'date_field';
+
+  @override
+  final String key;
+  final String placeholder;
+  @override
+  final DateFieldValue defaultValue;
+
+  final DateTime? min;
+  final DateTime? max;
+
+  @override
+  final bool mandatory;
+
+  DateFieldError? _error;
+
+  @override
+  void setError(DateFieldError? e) {
+    _error = e;
+  }
+
+  static DateFieldValue _getValueFromRaw(String? raw) {
+    if (raw == null) {
+      return DateFieldValue(null);
+    }
+    try {
+      return DateFieldValue(DateFormat('yyyy-MM-dd').parse(raw));
+    } catch (_) {
+      return DateFieldValue(null);
+    }
+  }
+
+  factory DateFieldModel.fromJson(Map<String, dynamic> json) {
+    return DateFieldModel(
+      key: json['key'],
+      placeholder: json['placeholder'],
+      defaultValue: _getValueFromRaw(json['initial_value']),
+      min: json['min'],
+      max: json['max'],
+      mandatory: json['mandatory'] == true,
+    );
+  }
+
+  DateFieldModel({
+    required this.key,
+    required this.placeholder,
+    required this.defaultValue,
+    required this.mandatory,
+    this.min,
+    this.max,
+  });
+
+  @override
+  DateFieldError? get error => _error;
 }

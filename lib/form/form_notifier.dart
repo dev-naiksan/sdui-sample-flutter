@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/widgets.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
 import 'package:sdui_flutter_sample/models/result.dart';
+
 import '../models/notifications.dart';
 import '../models/widget_model.dart';
 import '../validation_utils.dart';
@@ -54,14 +55,18 @@ class FormNotifier extends ChangeNotifier {
       model.setError(error);
       notifyListeners();
     }
-    if (notification case TextFieldWidgetNotification()) {
-      _values[notification.key] = notification.value;
-    } else if (notification case SelectionWidgetNotification()) {
-      _values[notification.key] = notification.value;
-    } else if (notification case PasswordConfirmationNotification()) {
-      _values[notification.key] = notification.value;
-    } else {
-      return false;
+    switch (notification) {
+      case TextFieldWidgetNotification():
+        _values[notification.key] = notification.value;
+
+      case DateFieldWidgetNotification():
+        _values[notification.key] = notification.value;
+
+      case PasswordConfirmationNotification():
+        _values[notification.key] = notification.value;
+
+      case SelectionWidgetNotification():
+        _values[notification.key] = notification.value;
     }
     _checkButtonState();
     notifyListeners();
@@ -93,7 +98,7 @@ class FormNotifier extends ChangeNotifier {
   }
 
   FieldError? _validateField(FieldModel model, FieldValue result) {
-    if(!model.mandatory){
+    if (!model.mandatory) {
       return null;
     }
     return switch (model) {
@@ -104,6 +109,8 @@ class FormNotifier extends ChangeNotifier {
       PasswordConfirmationModel() =>
         ValidationUtils.validateConfirmationPassword(
             model, result as PasswordConfirmationValue),
+      DateFieldModel() =>
+        ValidationUtils.validateDate(model, result as DateFieldValue),
       TextModel() => null,
     };
   }

@@ -6,20 +6,8 @@ import 'package:sdui_flutter_sample/widgets/selection_widget.dart';
 import 'package:sdui_flutter_sample/widgets/text_field_widget.dart';
 
 import '../models/widget_model.dart';
+import 'date_field.dart';
 import 'text_widget.dart';
-
-String getStr(FieldModel model) {
-  switch (model) {
-    case TextFieldModel():
-      return model.key;
-    case SelectionModel():
-      return model.key;
-    case TextModel():
-      return model.key;
-    case PasswordConfirmationModel():
-      return model.key;
-  }
-}
 
 class MapperWidget extends StatelessWidget {
   final FieldModel model;
@@ -70,6 +58,13 @@ class MapperWidget extends StatelessWidget {
           model: m,
           fieldValue: value,
           error: error as PasswordConfirmationError?,
+        );
+      case DateFieldModel():
+        DateFieldValue value = values[model.key] as DateFieldValue;
+        return DateInputField(
+          model: m,
+          fieldValue: value,
+          error: error as DateFieldError?,
         );
     }
   }

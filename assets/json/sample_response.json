@@ -22,6 +22,14 @@
     "initial_value": null
   },
   {
+    "key": "dob",
+    "type": "date_field",
+    "subtype": "date",
+    "mandatory": true,
+    "placeholder": "Select your dob*",
+    "initial_value": null
+  },
+  {
     "key": "password",
     "type": "password_confirmation",
     "subtype": "password",
