@@ -77,7 +77,18 @@ class FormNotifier extends ChangeNotifier {
     return true;
   }
 
-  Future<Result<String>> submit() async {
+  Map<String, String> getRequestMap() {
+    final Map<String, String> _map = {};
+    _values.forEach((key, value) {
+      final field = _modelsMap[key];
+      if (field != null && !field.isDisplayField) {
+        _map[field.key] = value.raw;
+      }
+    });
+    return _map;
+  }
+
+  Future<Result<Map<String, String>>> submit() async {
     for (var element in _modelsMap.values) {
       element.setError(null);
     }
@@ -86,7 +97,7 @@ class FormNotifier extends ChangeNotifier {
     if (hasErrors) {
       return Failure(error: 'Fields have errors');
     }
-    return Success(data: 'Submitted the form');
+    return Success(data: getRequestMap());
   }
 
   void _validate() {

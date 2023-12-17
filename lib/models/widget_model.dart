@@ -13,6 +13,8 @@ sealed class FieldModel {
 
   int get groupId;
 
+  bool get isDisplayField;
+
   void setError(covariant FieldError? e);
 
   static FieldModel fromJson(Map<String, dynamic> json) {
@@ -134,6 +136,9 @@ class TextFieldModel extends FieldModel {
 
   @override
   TextFieldError? get error => _error;
+
+  @override
+  bool get isDisplayField => false;
 }
 
 enum SelectionType {
@@ -226,6 +231,9 @@ class SelectionModel extends FieldModel {
     required this.mandatory,
     required this.groupId,
   });
+
+  @override
+  bool get isDisplayField => false;
 }
 
 class TextValue extends FieldValue<String> {
@@ -279,6 +287,9 @@ class TextModel extends FieldModel {
     required this.type,
     required this.groupId,
   });
+
+  @override
+  bool get isDisplayField => true;
 }
 
 class PasswordConfirmationModel extends FieldModel {
@@ -328,6 +339,9 @@ class PasswordConfirmationModel extends FieldModel {
     required this.mandatory,
     required this.groupId,
   });
+
+  @override
+  bool get isDisplayField => false;
 }
 
 class DateFieldModel extends FieldModel {
@@ -389,4 +403,7 @@ class DateFieldModel extends FieldModel {
 
   @override
   DateFieldError? get error => _error;
+
+  @override
+  bool get isDisplayField => false;
 }

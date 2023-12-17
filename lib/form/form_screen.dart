@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_highlight/themes/dracula.dart';
 import 'package:provider/provider.dart';
 import 'package:sdui_flutter_sample/form/form_notifier.dart';
 import 'package:sdui_flutter_sample/models/result.dart';
@@ -63,7 +67,23 @@ class FormScreen extends StatelessWidget {
 
     switch (result) {
       case Success():
-        showSuccess(context, result.data);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.black87,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: HighlightView(
+                jsonEncode(result.data),
+                language: 'json',
+                tabSize: 20,
+                theme: draculaTheme,
+                padding: const EdgeInsets.all(12),
+                textStyle: const TextStyle(fontSize: 16.0),
+              ),
+            );
+          },
+        );
       case Failure():
         showFailure(context, result.error);
     }

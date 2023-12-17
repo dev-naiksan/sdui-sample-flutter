@@ -39,6 +39,7 @@ dependencies:
   collection:
   another_flushbar:
   intl:
+  flutter_highlight:
 
 dev_dependencies:
   flutter_test:
