@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:sdui_flutter_sample/extensions.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
 
@@ -8,6 +7,8 @@ sealed class FieldModel {
   FieldValue get defaultValue;
 
   FieldError? get error;
+
+  bool get mandatory;
 
   void setError(covariant FieldError? e);
 
@@ -76,6 +77,9 @@ class TextFieldModel extends FieldModel {
   final int? min;
   final int? max;
 
+  @override
+  final bool mandatory;
+
   TextFieldError? _error;
 
   @override
@@ -93,6 +97,7 @@ class TextFieldModel extends FieldModel {
       defaultValue: TextFieldValue(json.getOrEmpty('initial_value')),
       min: json['min'],
       max: json['max'],
+      mandatory: json['mandatory'] == true,
     );
   }
 
@@ -101,6 +106,7 @@ class TextFieldModel extends FieldModel {
     required this.placeholder,
     required this.type,
     required this.defaultValue,
+    required this.mandatory,
     this.min,
     this.max,
   });
@@ -144,6 +150,8 @@ class SelectionModel extends FieldModel {
   final String key;
   @override
   final SelectionValue defaultValue;
+  @override
+  final bool mandatory;
 
   final String placeholder;
   final List<OptionModel> options;
@@ -180,6 +188,7 @@ class SelectionModel extends FieldModel {
           orElse: () => SelectionType.multi),
       options: o,
       defaultValue: SelectionValue(selected),
+      mandatory: json['mandatory'] == true,
     );
   }
 
@@ -189,6 +198,7 @@ class SelectionModel extends FieldModel {
     required this.options,
     required this.type,
     required this.defaultValue,
+    required this.mandatory,
   });
 }
 
@@ -217,6 +227,9 @@ class TextModel extends FieldModel {
 
   @override
   FieldError? get error => null;
+
+  @override
+  bool get mandatory => false;
 
   @override
   void setError(FieldError? e) {}
@@ -248,6 +261,9 @@ class PasswordConfirmationModel extends FieldModel {
   @override
   final PasswordConfirmationValue defaultValue;
 
+  @override
+  final bool mandatory;
+
   PasswordConfirmationError? _error;
 
   @override
@@ -267,6 +283,7 @@ class PasswordConfirmationModel extends FieldModel {
         json.getOrEmpty('initial_value'),
         json.getOrEmpty('initial_value'),
       ),
+      mandatory: json['mandatory'] == true,
     );
   }
 
@@ -275,5 +292,6 @@ class PasswordConfirmationModel extends FieldModel {
     required this.placeholder,
     required this.placeholder2,
     required this.defaultValue,
+    required this.mandatory,
   });
 }

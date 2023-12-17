@@ -9,36 +9,41 @@
     "key": "name",
     "type": "text_field",
     "subtype": "text",
-    "placeholder": "Enter your name",
+    "placeholder": "Enter your name*",
+    "mandatory": true,
     "initial_value": "Sanket"
   },
   {
     "key": "email",
     "type": "text_field",
     "subtype": "email",
-    "placeholder": "Enter your email id",
+    "mandatory": true,
+    "placeholder": "Enter your email id*",
     "initial_value": null
   },
   {
     "key": "password",
     "type": "password_confirmation",
     "subtype": "password",
-    "placeholder": "Enter your password",
-    "placeholder2": "Confirm your password",
+    "mandatory": true,
+    "placeholder": "Enter your password*",
+    "placeholder2": "Confirm your password*",
     "initial_value": "Aa#12346;"
   },
   {
     "key": "age",
     "type": "text_field",
     "subtype": "integer",
-    "placeholder": "Enter your age",
+    "mandatory": true,
+    "placeholder": "Enter your age*",
     "initial_value": null
   },
   {
     "key": "gender",
     "type": "selection",
     "subtype": "single",
-    "placeholder": "Select your gender",
+    "mandatory": true,
+    "placeholder": "Select your gender*",
     "initial_value": null,
     "options": [
       {
@@ -57,13 +62,15 @@
     "type": "text",
     "key": "more_title",
     "subtype": "title",
+    "mandatory": true,
     "initial_value": "More details"
   },
   {
     "key": "interest",
     "type": "selection",
     "subtype": "multi",
-    "placeholder": "Select your interest",
+    "placeholder": "Select your interest*",
+    "mandatory": true,
     "initial_value": null,
     "options": [
       {
@@ -88,7 +95,8 @@
     "type": "text_field",
     "subtype": "text",
     "min": 10,
-    "placeholder": "Enter your address",
+    "placeholder": "Enter your address*",
+    "mandatory": true,
     "initial_value": null
   },
   {
@@ -97,7 +105,8 @@
     "subtype": "integer",
     "min": 6,
     "max": 6,
-    "placeholder": "Enter your pincode",
+    "placeholder": "Enter your pincode*",
+    "mandatory": true,
     "initial_value": null
   },
   {
@@ -105,6 +114,7 @@
     "type": "text_field",
     "subtype": "decimal",
     "placeholder": "Enter your weight",
+    "mandatory": false,
     "initial_value": null
   },
   {
@@ -113,6 +123,7 @@
     "subtype": "single",
     "placeholder": "Select your body type",
     "initial_value": null,
+    "mandatory": false,
     "options": [
       {
         "key": "skinny",
@@ -130,8 +141,9 @@
     "key": "workout_days",
     "type": "selection",
     "subtype": "multi",
-    "placeholder": "Days on which you workout",
+    "placeholder": "Days on which you workout*",
     "initial_value": null,
+    "mandatory": true,
     "options": [
       {
         "key": "mon",
@@ -174,8 +186,9 @@
     "key": "workouts",
     "type": "selection",
     "subtype": "dropdown_multi",
-    "placeholder": "Your favorite workouts",
+    "placeholder": "Your favorite workouts*",
     "initial_value": null,
+    "mandatory": true,
     "options": [
       {
         "key": "biceps_curl",
@@ -198,7 +211,8 @@
     "key": "workout_timings",
     "type": "selection",
     "subtype": "dropdown_single",
-    "placeholder": "What time do you workout?",
+    "placeholder": "What time do you workout?*",
+    "mandatory": true,
     "initial_value": null,
     "options": [
       {

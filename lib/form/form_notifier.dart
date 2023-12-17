@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:sdui_flutter_sample/models/error_model.dart';
+import 'package:sdui_flutter_sample/models/result.dart';
 import '../models/notifications.dart';
 import '../models/widget_model.dart';
 import '../validation_utils.dart';
@@ -19,6 +20,10 @@ class FormNotifier extends ChangeNotifier {
   bool _loading = false;
 
   bool get loading => _loading;
+
+  bool _allFieldsValid = false;
+
+  bool get allFieldsValid => _allFieldsValid;
 
   final ScrollController scrollController = ScrollController();
 
@@ -45,71 +50,53 @@ class FormNotifier extends ChangeNotifier {
   bool onNotification(FieldNotification notification) {
     final model = _modelsMap[notification.key];
     if (model != null && model.error != null) {
-      _validateField(model, notification.value);
+      final error = _validateField(model, notification.value);
+      model.setError(error);
       notifyListeners();
     }
-    switch (notification) {
-      case TextFieldWidgetNotification():
-        _values[notification.key] = notification.value;
-        notifyListeners();
-        return true;
-      case SelectionWidgetNotification():
-        _values[notification.key] = notification.value;
-        notifyListeners();
-        return true;
-      case PasswordConfirmationNotification():
-        _values[notification.key] = notification.value;
-        notifyListeners();
-        return true;
+    if (notification case TextFieldWidgetNotification()) {
+      _values[notification.key] = notification.value;
+    } else if (notification case SelectionWidgetNotification()) {
+      _values[notification.key] = notification.value;
+    } else if (notification case PasswordConfirmationNotification()) {
+      _values[notification.key] = notification.value;
+    } else {
+      return false;
     }
+    _checkButtonState();
+    notifyListeners();
+    return true;
   }
 
-  void _scrollToField(GlobalKey key) {
-    final RenderBox? renderBox =
-        key.currentContext?.findRenderObject() as RenderBox?;
-    if(renderBox == null){
-      return;
-    }
-    final position = renderBox.localToGlobal(Offset.zero);
-    scrollController.animateTo(
-      position.dy,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
-  }
-
-  void submit() {
+  Future<Result<String>> submit() async {
     for (var element in _modelsMap.values) {
       element.setError(null);
     }
     _validate();
     final hasErrors = _modelsMap.values.any((element) => element.error != null);
     if (hasErrors) {
-      print('Fields have errors');
-      return;
+      return Failure(error: 'Fields have errors');
     }
-
-    print(
-        'Submitting form with values as: ${_values.map((k, v) => MapEntry(k, v.raw))}');
+    return Success(data: 'Submitted the form');
   }
 
   void _validate() {
-    for (var entry in _modelsMap.entries) {
+    for (final entry in _modelsMap.entries) {
       final fieldValue = _values[entry.key];
       if (fieldValue == null) {
         continue;
       }
-      _validateField(entry.value, fieldValue);
-    }
-    final firstModelWithError = _modelsMap.values.firstWhereOrNull((element) => element.error != null);
-    if(firstModelWithError != null){
-      // _scrollToField(firstModelWithError);
+      final error = _validateField(entry.value, fieldValue);
+      entry.value.setError(error);
     }
     notifyListeners();
   }
 
-  void _validateField(FieldModel model, FieldValue result) {
-    final error = switch (model) {
+  FieldError? _validateField(FieldModel model, FieldValue result) {
+    if(!model.mandatory){
+      return null;
+    }
+    return switch (model) {
       TextFieldModel() =>
         ValidationUtils.validateTextField(model, result as TextFieldValue),
       SelectionModel() =>
@@ -119,15 +106,22 @@ class FormNotifier extends ChangeNotifier {
             model, result as PasswordConfirmationValue),
       TextModel() => null,
     };
-    if (error == null) {
-      model.setError(null);
-    } else {
-      model.setError(error);
-    }
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _checkButtonState() {
+    final hasErrors = _modelsMap.values.any((model) {
+      final value = _values[model.key];
+      if (value == null) {
+        return true;
+      }
+      final error = _validateField(model, value);
+      return error != null;
+    });
+    _allFieldsValid = !hasErrors;
   }
 }
