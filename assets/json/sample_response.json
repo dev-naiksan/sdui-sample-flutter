@@ -1,14 +1,16 @@
 [
   {
     "type": "text",
-    "key": "title",
-    "subtype": "title",
+    "key": "heading1",
+    "subtype": "subtitle",
+    "group_id": 1,
     "initial_value": "Personal details"
   },
   {
     "key": "name",
     "type": "text_field",
     "subtype": "text",
+    "group_id": 1,
     "placeholder": "Enter your name*",
     "mandatory": true,
     "initial_value": "Sanket"
@@ -17,39 +19,42 @@
     "key": "email",
     "type": "text_field",
     "subtype": "email",
+    "group_id": 1,
     "mandatory": true,
     "placeholder": "Enter your email id*",
-    "initial_value": null
-  },
-  {
-    "key": "dob",
-    "type": "date_field",
-    "subtype": "date",
-    "mandatory": true,
-    "placeholder": "Select your dob*",
     "initial_value": null
   },
   {
     "key": "password",
     "type": "password_confirmation",
     "subtype": "password",
+    "group_id": 1,
     "mandatory": true,
     "placeholder": "Enter your password*",
     "placeholder2": "Confirm your password*",
     "initial_value": "Aa#12346;"
   },
   {
-    "key": "age",
-    "type": "text_field",
-    "subtype": "integer",
+    "type": "text",
+    "key": "heading2",
+    "subtype": "subtitle",
+    "group_id": 2,
+    "initial_value": "Other details"
+  },
+  {
+    "key": "dob",
+    "type": "date_field",
+    "subtype": "date",
+    "group_id": 2,
     "mandatory": true,
-    "placeholder": "Enter your age*",
+    "placeholder": "Select your dob*",
     "initial_value": null
   },
   {
     "key": "gender",
     "type": "selection",
     "subtype": "single",
+    "group_id": 2,
     "mandatory": true,
     "placeholder": "Select your gender*",
     "initial_value": null,
@@ -68,15 +73,67 @@
   },
   {
     "type": "text",
-    "key": "more_title",
-    "subtype": "title",
+    "key": "heading3",
+    "subtype": "subtitle",
+    "group_id": 3,
+    "initial_value": "Address details"
+  },
+  {
+    "key": "address",
+    "type": "text_field",
+    "subtype": "text",
+    "group_id": 3,
+    "min": 10,
+    "placeholder": "Enter your address*",
     "mandatory": true,
-    "initial_value": "More details"
+    "initial_value": null
+  },
+  {
+    "key": "pincode",
+    "type": "text_field",
+    "subtype": "integer",
+    "group_id": 3,
+    "min": 6,
+    "max": 6,
+    "placeholder": "Enter your pincode*",
+    "mandatory": true,
+    "initial_value": null
+  },
+  {
+    "key": "body_type",
+    "type": "selection",
+    "subtype": "single",
+    "group_id": 4,
+    "placeholder": "Select your body type",
+    "initial_value": null,
+    "mandatory": false,
+    "options": [
+      {
+        "key": "skinny",
+        "value": "Skinny",
+        "selected": true
+      },
+      {
+        "key": "muscular",
+        "value": "Muscular",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "key": "weight",
+    "type": "text_field",
+    "subtype": "decimal",
+    "group_id": 4,
+    "placeholder": "Enter your weight",
+    "mandatory": false,
+    "initial_value": null
   },
   {
     "key": "interest",
     "type": "selection",
     "subtype": "multi",
+    "group_id": 4,
     "placeholder": "Select your interest*",
     "mandatory": true,
     "initial_value": null,
@@ -99,56 +156,10 @@
     ]
   },
   {
-    "key": "address",
-    "type": "text_field",
-    "subtype": "text",
-    "min": 10,
-    "placeholder": "Enter your address*",
-    "mandatory": true,
-    "initial_value": null
-  },
-  {
-    "key": "pincode",
-    "type": "text_field",
-    "subtype": "integer",
-    "min": 6,
-    "max": 6,
-    "placeholder": "Enter your pincode*",
-    "mandatory": true,
-    "initial_value": null
-  },
-  {
-    "key": "weight",
-    "type": "text_field",
-    "subtype": "decimal",
-    "placeholder": "Enter your weight",
-    "mandatory": false,
-    "initial_value": null
-  },
-  {
-    "key": "body_type",
-    "type": "selection",
-    "subtype": "single",
-    "placeholder": "Select your body type",
-    "initial_value": null,
-    "mandatory": false,
-    "options": [
-      {
-        "key": "skinny",
-        "value": "Skinny",
-        "selected": true
-      },
-      {
-        "key": "muscular",
-        "value": "Muscular",
-        "selected": false
-      }
-    ]
-  },
-  {
     "key": "workout_days",
     "type": "selection",
     "subtype": "multi",
+    "group_id": 5,
     "placeholder": "Days on which you workout*",
     "initial_value": null,
     "mandatory": true,
@@ -194,6 +205,7 @@
     "key": "workouts",
     "type": "selection",
     "subtype": "dropdown_multi",
+    "group_id": 5,
     "placeholder": "Your favorite workouts*",
     "initial_value": null,
     "mandatory": true,
@@ -219,6 +231,7 @@
     "key": "workout_timings",
     "type": "selection",
     "subtype": "dropdown_single",
+    "group_id": 5,
     "placeholder": "What time do you workout?*",
     "mandatory": true,
     "initial_value": null,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
@@ -31,6 +32,9 @@ class FormNotifier extends ChangeNotifier {
   FormNotifier() {
     getForm();
   }
+
+  List<List<FieldModel>> get groups =>
+      modelsMap.values.groupListsBy((e) => e.groupId).values.toList();
 
   void getForm() async {
     _loading = true;

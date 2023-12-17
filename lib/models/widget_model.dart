@@ -11,6 +11,8 @@ sealed class FieldModel {
 
   bool get mandatory;
 
+  int get groupId;
+
   void setError(covariant FieldError? e);
 
   static FieldModel fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ sealed class FieldModel {
           key: 'unknown',
           defaultValue: TextValue('Unknown widget type: $type'),
           type: TextType.body,
+          groupId: json['group_id'],
         );
     }
   }
@@ -94,6 +97,9 @@ class TextFieldModel extends FieldModel {
   @override
   final bool mandatory;
 
+  @override
+  final int groupId;
+
   TextFieldError? _error;
 
   @override
@@ -103,16 +109,16 @@ class TextFieldModel extends FieldModel {
 
   factory TextFieldModel.fromJson(Map<String, dynamic> json) {
     return TextFieldModel(
-      key: json['key'],
-      placeholder: json['placeholder'],
-      type: TextFieldType.values.firstWhere(
-          (element) => element.name == json['subtype'],
-          orElse: () => TextFieldType.text),
-      defaultValue: TextFieldValue(json.getOrEmpty('initial_value')),
-      min: json['min'],
-      max: json['max'],
-      mandatory: json['mandatory'] == true,
-    );
+        key: json['key'],
+        placeholder: json['placeholder'],
+        type: TextFieldType.values.firstWhere(
+            (element) => element.name == json['subtype'],
+            orElse: () => TextFieldType.text),
+        defaultValue: TextFieldValue(json.getOrEmpty('initial_value')),
+        min: json['min'],
+        max: json['max'],
+        mandatory: json['mandatory'] == true,
+        groupId: json['group_id']);
   }
 
   TextFieldModel({
@@ -121,6 +127,7 @@ class TextFieldModel extends FieldModel {
     required this.type,
     required this.defaultValue,
     required this.mandatory,
+    required this.groupId,
     this.min,
     this.max,
   });
@@ -174,6 +181,9 @@ class SelectionModel extends FieldModel {
   SelectionError? _error;
 
   @override
+  final int groupId;
+
+  @override
   void setError(SelectionError? e) {
     _error = e;
   }
@@ -203,6 +213,7 @@ class SelectionModel extends FieldModel {
       options: o,
       defaultValue: SelectionValue(selected),
       mandatory: json['mandatory'] == true,
+      groupId: json['group_id'],
     );
   }
 
@@ -213,6 +224,7 @@ class SelectionModel extends FieldModel {
     required this.type,
     required this.defaultValue,
     required this.mandatory,
+    required this.groupId,
   });
 }
 
@@ -246,22 +258,26 @@ class TextModel extends FieldModel {
   bool get mandatory => false;
 
   @override
+  final int groupId;
+
+  @override
   void setError(FieldError? e) {}
 
   factory TextModel.fromJson(Map<String, dynamic> json) {
     return TextModel(
-      key: json['key'],
-      defaultValue: TextValue(json.getOrEmpty('initial_value')),
-      type: TextType.values.firstWhere(
-          (element) => element.name == json['subtype'],
-          orElse: () => TextType.body),
-    );
+        key: json['key'],
+        defaultValue: TextValue(json.getOrEmpty('initial_value')),
+        type: TextType.values.firstWhere(
+            (element) => element.name == json['subtype'],
+            orElse: () => TextType.body),
+        groupId: json['group_id']);
   }
 
   TextModel({
     required this.key,
     required this.defaultValue,
     required this.type,
+    required this.groupId,
   });
 }
 
@@ -278,6 +294,9 @@ class PasswordConfirmationModel extends FieldModel {
   @override
   final bool mandatory;
 
+  @override
+  final int groupId;
+
   PasswordConfirmationError? _error;
 
   @override
@@ -290,15 +309,15 @@ class PasswordConfirmationModel extends FieldModel {
 
   factory PasswordConfirmationModel.fromJson(Map<String, dynamic> json) {
     return PasswordConfirmationModel(
-      key: json['key'],
-      placeholder: json['placeholder'],
-      placeholder2: json['placeholder2'],
-      defaultValue: PasswordConfirmationValue(
-        json.getOrEmpty('initial_value'),
-        json.getOrEmpty('initial_value'),
-      ),
-      mandatory: json['mandatory'] == true,
-    );
+        key: json['key'],
+        placeholder: json['placeholder'],
+        placeholder2: json['placeholder2'],
+        defaultValue: PasswordConfirmationValue(
+          json.getOrEmpty('initial_value'),
+          json.getOrEmpty('initial_value'),
+        ),
+        mandatory: json['mandatory'] == true,
+        groupId: json['group_id']);
   }
 
   PasswordConfirmationModel({
@@ -307,6 +326,7 @@ class PasswordConfirmationModel extends FieldModel {
     required this.placeholder2,
     required this.defaultValue,
     required this.mandatory,
+    required this.groupId,
   });
 }
 
@@ -324,6 +344,9 @@ class DateFieldModel extends FieldModel {
 
   @override
   final bool mandatory;
+
+  @override
+  final int groupId;
 
   DateFieldError? _error;
 
@@ -345,13 +368,13 @@ class DateFieldModel extends FieldModel {
 
   factory DateFieldModel.fromJson(Map<String, dynamic> json) {
     return DateFieldModel(
-      key: json['key'],
-      placeholder: json['placeholder'],
-      defaultValue: _getValueFromRaw(json['initial_value']),
-      min: json['min'],
-      max: json['max'],
-      mandatory: json['mandatory'] == true,
-    );
+        key: json['key'],
+        placeholder: json['placeholder'],
+        defaultValue: _getValueFromRaw(json['initial_value']),
+        min: json['min'],
+        max: json['max'],
+        mandatory: json['mandatory'] == true,
+        groupId: json['group_id']);
   }
 
   DateFieldModel({
@@ -359,6 +382,7 @@ class DateFieldModel extends FieldModel {
     required this.placeholder,
     required this.defaultValue,
     required this.mandatory,
+    required this.groupId,
     this.min,
     this.max,
   });

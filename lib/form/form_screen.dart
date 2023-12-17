@@ -6,6 +6,7 @@ import 'package:sdui_flutter_sample/models/result.dart';
 import 'package:sdui_flutter_sample/widgets/mapper_widget.dart';
 
 import '../models/notifications.dart';
+import '../models/widget_model.dart';
 
 class FormScreen extends StatelessWidget {
   const FormScreen({super.key});
@@ -15,6 +16,7 @@ class FormScreen extends StatelessWidget {
     return Consumer<FormNotifier>(
       builder: (context, notifier, child) {
         return Scaffold(
+          backgroundColor: const Color(0xFFF8F8F8),
           body: Builder(
             builder: (context) {
               if (notifier.loading) {
@@ -27,19 +29,13 @@ class FormScreen extends StatelessWidget {
                 child: ListView(
                   controller: notifier.scrollController,
                   padding: EdgeInsets.fromLTRB(
-                    24,
+                    16,
                     MediaQuery.of(context).viewPadding.top + 24,
-                    24,
+                    16,
                     100,
                   ),
-                  children: notifier.modelsMap.values.map((e) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: MapperWidget(
-                        model: e,
-                        values: notifier.values,
-                      ),
-                    );
+                  children: notifier.groups.map((list) {
+                    return FieldGroupCard(list: list, values: notifier.values);
                   }).toList(),
                 ),
               );
@@ -74,17 +70,59 @@ class FormScreen extends StatelessWidget {
   }
 
   void showSuccess(BuildContext context, String data) {
-    Flushbar(
-      message: data,
-      duration: const Duration(seconds: 1),
-    ).show(context);
+    _showFlushBar(context: context, message: data);
   }
 
   void showFailure(BuildContext context, String error) {
+    _showFlushBar(context: context, message: error, color: Colors.deepOrange);
+  }
+
+  void _showFlushBar({
+    required BuildContext context,
+    required String message,
+    Color color = Colors.green,
+  }) {
     Flushbar(
-      message: error,
-      backgroundColor: Colors.deepOrange,
+      message: message,
+      backgroundColor: color,
       duration: const Duration(seconds: 1),
+      flushbarPosition: FlushbarPosition.TOP,
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      margin: const EdgeInsets.all(12),
     ).show(context);
+  }
+}
+
+class FieldGroupCard extends StatelessWidget {
+  final List<FieldModel> list;
+  final Map<String, FieldValue<dynamic>> values;
+
+  const FieldGroupCard({super.key, required this.list, required this.values});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Card(
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: list.map((model) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: MapperWidget(
+                  model: model,
+                  values: values,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
   }
 }
