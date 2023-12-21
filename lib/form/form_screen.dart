@@ -11,6 +11,7 @@ import 'package:sdui_flutter_sample/widgets/mapper_widget.dart';
 
 import '../models/notifications.dart';
 import '../models/widget_model.dart';
+import '../widgets/app_card.dart';
 
 class FormScreen extends StatelessWidget {
   const FormScreen({super.key});
@@ -21,6 +22,9 @@ class FormScreen extends StatelessWidget {
       builder: (context, notifier, child) {
         return Scaffold(
           backgroundColor: const Color(0xFFF8F8F8),
+          appBar: AppBar(
+            title: const Text('SDUI Sample'),
+          ),
           body: Builder(
             builder: (context) {
               if (notifier.loading) {
@@ -32,12 +36,7 @@ class FormScreen extends StatelessWidget {
                 },
                 child: ListView(
                   controller: notifier.scrollController,
-                  padding: EdgeInsets.fromLTRB(
-                    16,
-                    MediaQuery.of(context).viewPadding.top + 24,
-                    16,
-                    100,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
                   children: notifier.groups.map((list) {
                     return FieldGroupCard(list: list, values: notifier.values);
                   }).toList(),
@@ -123,9 +122,7 @@ class FieldGroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
+      child: AppCard(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(

@@ -75,16 +75,26 @@ class _PasswordConfirmationWidgetState
           },
         ),
         const SizedBox(height: 4),
-        _buildPasswordHint(PasswordValidator.msgAtLeastOneUpCase,
-            PasswordValidator.hasAtLeastOneUpCase(_controller1.text)),
-        _buildPasswordHint(PasswordValidator.msgAtLeastOneLoCase,
-            PasswordValidator.hasAtLeastOneLoCase(_controller1.text)),
-        _buildPasswordHint(PasswordValidator.msgAtLeastOneNumber,
-            PasswordValidator.hasAtLeastOneNumber(_controller1.text)),
-        _buildPasswordHint(PasswordValidator.msgAtLeastOneSymbol,
-            PasswordValidator.hasAtLeastOneSymbol(_controller1.text)),
-        _buildPasswordHint(PasswordValidator.msgValidLength,
-            PasswordValidator.hasValidLength(_controller1.text)),
+        _buildPasswordHint(
+          PasswordValidator.msgAtLeastOneUpCase,
+          PasswordValidator.hasAtLeastOneUpCase(_controller2.text),
+        ),
+        _buildPasswordHint(
+          PasswordValidator.msgAtLeastOneLoCase,
+          PasswordValidator.hasAtLeastOneLoCase(_controller2.text),
+        ),
+        _buildPasswordHint(
+          PasswordValidator.msgAtLeastOneNumber,
+          PasswordValidator.hasAtLeastOneNumber(_controller2.text),
+        ),
+        _buildPasswordHint(
+          PasswordValidator.msgAtLeastOneSymbol,
+          PasswordValidator.hasAtLeastOneSymbol(_controller2.text),
+        ),
+        _buildPasswordHint(
+          PasswordValidator.msgValidLength,
+          PasswordValidator.hasValidLength(_controller2.text),
+        ),
       ],
     );
   }

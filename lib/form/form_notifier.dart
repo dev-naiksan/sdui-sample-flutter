@@ -57,35 +57,22 @@ class FormNotifier extends ChangeNotifier {
     if (model != null && model.error != null) {
       final error = _validateField(model, notification.value);
       model.setError(error);
-      notifyListeners();
     }
-    switch (notification) {
-      case TextFieldWidgetNotification():
-        _values[notification.key] = notification.value;
-
-      case DateFieldWidgetNotification():
-        _values[notification.key] = notification.value;
-
-      case PasswordConfirmationNotification():
-        _values[notification.key] = notification.value;
-
-      case SelectionWidgetNotification():
-        _values[notification.key] = notification.value;
-    }
+    _values[notification.key] = notification.value;
     _checkButtonState();
     notifyListeners();
     return true;
   }
 
   Map<String, String> getRequestMap() {
-    final Map<String, String> _map = {};
+    final Map<String, String> reqMap = {};
     _values.forEach((key, value) {
       final field = _modelsMap[key];
       if (field != null && !field.isDisplayField) {
-        _map[field.key] = value.raw;
+        reqMap[field.key] = value.raw;
       }
     });
-    return _map;
+    return reqMap;
   }
 
   Future<Result<Map<String, String>>> submit() async {
