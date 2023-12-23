@@ -37,6 +37,14 @@ class ValidationUtils {
     return null;
   }
 
+  static SelectionError? validateRemoteSelection(
+      RemoteSelectionModel model, SelectionValue result) {
+    if (result.value.isEmpty) {
+      return SelectionError("Select option");
+    }
+    return null;
+  }
+
   static PasswordConfirmationError? validateConfirmationPassword(
       PasswordConfirmationModel model, PasswordConfirmationValue result) {
     final error = validatePassword(result.value1);

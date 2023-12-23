@@ -24,6 +24,8 @@ sealed class FieldModel {
         return TextFieldModel.fromJson(json);
       case SelectionModel.widgetType:
         return SelectionModel.fromJson(json);
+      case RemoteSelectionModel.widgetType:
+        return RemoteSelectionModel.fromJson(json);
       case TextModel.widgetType:
         return TextModel.fromJson(json);
       case PasswordConfirmationModel.widgetType:
@@ -150,6 +152,20 @@ enum SelectionType {
   final String value;
 
   const SelectionType(this.value);
+
+  bool get isSingleType =>
+      this == SelectionType.single || this == SelectionType.dropdownSingle;
+
+  bool get isMultiSelectType => !isSingleType;
+}
+
+enum RemoteDropdownSelectionType {
+  single('single'),
+  multi('multi');
+
+  final String value;
+
+  const RemoteDropdownSelectionType(this.value);
 }
 
 class OptionModel {
@@ -157,6 +173,13 @@ class OptionModel {
   final String value;
 
   OptionModel({required this.key, required this.value});
+
+  @override
+  bool operator ==(other) =>
+      other is OptionModel && key == other.key && value == other.value;
+
+  @override
+  int get hashCode => Object.hash(key, value);
 }
 
 class SelectionValue extends FieldValue<Set<OptionModel>> {
@@ -236,6 +259,96 @@ class SelectionModel extends FieldModel {
   bool get isDisplayField => false;
 }
 
+class RemoteSelectionModel extends FieldModel {
+  static const widgetType = 'remote_selection';
+
+  @override
+  final String key;
+  @override
+  final SelectionValue defaultValue;
+  @override
+  final bool mandatory;
+
+  final String placeholder;
+  final RemoteDropdownSelectionType type;
+  final ApiConfig apiConfig;
+
+  SelectionError? _error;
+
+  @override
+  final int groupId;
+
+  @override
+  void setError(SelectionError? e) {
+    _error = e;
+  }
+
+  @override
+  FieldError? get error => _error;
+
+  factory RemoteSelectionModel.fromJson(Map<String, dynamic> json) {
+    List<dynamic> oRaw = json['initial_value'] ?? [];
+    Set<OptionModel> selected = {};
+
+    for (var element in oRaw) {
+      final option = OptionModel(key: element['key'], value: element['value']);
+      if (element['selected'] == true) {
+        selected.add(option);
+      }
+    }
+
+    return RemoteSelectionModel(
+      key: json['key'],
+      placeholder: json['placeholder'],
+      type: RemoteDropdownSelectionType.values.firstWhere(
+          (element) => element.value == json['subtype'],
+          orElse: () => RemoteDropdownSelectionType.multi),
+      defaultValue: SelectionValue(selected),
+      mandatory: json['mandatory'] == true,
+      groupId: json['group_id'],
+      apiConfig: ApiConfig.fromJson(json['api_config']),
+    );
+  }
+
+  RemoteSelectionModel({
+    required this.key,
+    required this.placeholder,
+    required this.type,
+    required this.defaultValue,
+    required this.mandatory,
+    required this.groupId,
+    required this.apiConfig,
+  });
+
+  @override
+  bool get isDisplayField => false;
+}
+
+enum ApiMethod { get, post }
+
+class ApiConfig {
+  final String endpoint;
+  final ApiMethod type;
+  final Map<String, dynamic> queryParams;
+  final Map<String, dynamic> headers;
+
+  ApiConfig({
+    required this.endpoint,
+    required this.type,
+    required this.queryParams,
+    required this.headers,
+  });
+
+  factory ApiConfig.fromJson(Map<String, dynamic> json) {
+    return ApiConfig(
+      endpoint: json['endpoint'],
+      type: json['type'] == 'GET' ? ApiMethod.get : ApiMethod.post,
+      queryParams: json['query_params'],
+      headers: json['headers'],
+    );
+  }
+}
+
 class TextValue extends FieldValue<String> {
   @override
   String value;
@@ -273,12 +386,13 @@ class TextModel extends FieldModel {
 
   factory TextModel.fromJson(Map<String, dynamic> json) {
     return TextModel(
-        key: json['key'],
-        defaultValue: TextValue(json.getOrEmpty('initial_value')),
-        type: TextType.values.firstWhere(
-            (element) => element.name == json['subtype'],
-            orElse: () => TextType.body),
-        groupId: json['group_id']);
+      key: json['key'],
+      defaultValue: TextValue(json.getOrEmpty('initial_value')),
+      type: TextType.values.firstWhere(
+          (element) => element.name == json['subtype'],
+          orElse: () => TextType.body),
+      groupId: json['group_id'],
+    );
   }
 
   TextModel({
@@ -320,15 +434,16 @@ class PasswordConfirmationModel extends FieldModel {
 
   factory PasswordConfirmationModel.fromJson(Map<String, dynamic> json) {
     return PasswordConfirmationModel(
-        key: json['key'],
-        placeholder: json['placeholder'],
-        placeholder2: json['placeholder2'],
-        defaultValue: PasswordConfirmationValue(
-          json.getOrEmpty('initial_value'),
-          json.getOrEmpty('initial_value'),
-        ),
-        mandatory: json['mandatory'] == true,
-        groupId: json['group_id']);
+      key: json['key'],
+      placeholder: json['placeholder'],
+      placeholder2: json['placeholder2'],
+      defaultValue: PasswordConfirmationValue(
+        json.getOrEmpty('initial_value'),
+        json.getOrEmpty('initial_value'),
+      ),
+      mandatory: json['mandatory'] == true,
+      groupId: json['group_id'],
+    );
   }
 
   PasswordConfirmationModel({

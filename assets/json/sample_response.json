@@ -252,5 +252,43 @@
         "selected": false
       }
     ]
+  },
+  {
+    "key": "key1",
+    "type": "remote_selection",
+    "subtype": "multi",
+    "group_id": 5,
+    "placeholder": "Preferred Book Genres*",
+    "initial_value": null,
+    "mandatory": true,
+    "api_config": {
+      "endpoint": "/common/books",
+      "method": "GET",
+      "query_params": {
+        "key1": "value1"
+      },
+      "headers": {
+        "header1": "header-value1"
+      }
+    }
+  },
+  {
+    "key": "key2",
+    "type": "remote_selection",
+    "subtype": "single",
+    "group_id": 5,
+    "placeholder": "Favorite Movie Genre*",
+    "initial_value": null,
+    "mandatory": true,
+    "api_config": {
+      "endpoint": "/common/movies",
+      "method": "GET",
+      "query_params": {
+        "key1": "value1"
+      },
+      "headers": {
+        "header1": "header-value1"
+      }
+    }
   }
 ]

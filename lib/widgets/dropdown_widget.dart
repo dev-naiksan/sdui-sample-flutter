@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sdui_flutter_sample/models/notifications.dart';
 
 import '../models/error_model.dart';
@@ -19,7 +20,19 @@ class DropdownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final errorMessage = error?.value;
-    return InkWell(
+    final textValue = fieldValue.value.map((e) => e.value).join(',');
+    return TextFormField(
+      controller: TextEditingController(text: textValue),
+      keyboardType: TextInputType.none,
+      readOnly: true,
+      showCursor: false,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(borderSide: BorderSide()),
+        labelText: model.placeholder,
+        hintText: model.placeholder,
+        errorText: errorMessage,
+        suffixIcon: const Icon(Icons.arrow_drop_down),
+      ),
       onTap: () async {
         final selected = await _showBottomSheet(context);
         if (selected != null) {
@@ -29,31 +42,6 @@ class DropdownField extends StatelessWidget {
           }
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  model.placeholder,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                if (fieldValue.value.isNotEmpty)
-                  Text(fieldValue.value.map((e) => e.value).join(',')),
-                if (errorMessage != null)
-                  Text(
-                    errorMessage,
-                    style: const TextStyle(color: Colors.red),
-                  )
-              ],
-            ),
-            const Icon(Icons.arrow_drop_down),
-          ],
-        ),
-      ),
     );
   }
 
@@ -61,74 +49,85 @@ class DropdownField extends StatelessWidget {
     return showModalBottomSheet<SelectionValue?>(
       context: context,
       builder: (context) {
-        return DropdownSheetContent(model: model, fieldValue: fieldValue);
+        return ChangeNotifierProvider<DropdownNotifier>(
+          create: (_) => DropdownNotifier(fieldValue.value),
+          child: DropdownSheetContent(
+            model: model,
+            fieldValue: fieldValue,
+          ),
+        );
       },
     );
   }
 }
 
-class DropdownSheetContent extends StatefulWidget {
+class DropdownSheetContent extends StatelessWidget {
   final SelectionModel model;
   final SelectionValue fieldValue;
 
-  const DropdownSheetContent(
-      {super.key, required this.model, required this.fieldValue});
-
-  @override
-  State<DropdownSheetContent> createState() => _DropdownSheetContentState();
-}
-
-class _DropdownSheetContentState extends State<DropdownSheetContent> {
-  final Set<OptionModel> _selected = {};
-
-  @override
-  void initState() {
-    _selected.addAll(widget.fieldValue.value);
-    super.initState();
-  }
+  const DropdownSheetContent({
+    super.key,
+    required this.model,
+    required this.fieldValue,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24.0),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ...widget.model.options
-              .map((e) => InkWell(
-                    onTap: () {
-                      if (widget.model.type == SelectionType.dropdownSingle) {
-                        Navigator.pop(context, SelectionValue({e}));
-                      } else {
-                        if (_selected.contains(e)) {
-                          _selected.remove(e);
-                        } else {
-                          _selected.add(e);
-                        }
-                        setState(() {});
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          if (_selected.contains(e)) const Icon(Icons.check),
-                          Text(e.value),
-                        ],
-                      ),
-                    ),
-                  ))
-              .toList(),
-          if (widget.model.type == SelectionType.dropdownMulti)
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context, SelectionValue(_selected));
-                },
-                child: const Text('Done')),
-        ],
-      ),
-    );
+    return Consumer<DropdownNotifier>(builder: (_, notifier, __) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Text(model.placeholder, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
+              const SizedBox(height: 12),
+              const Divider(),
+              Expanded(
+                child: ListView(
+                  children: model.options
+                      .map(
+                        (e) => CheckboxListTile(
+                          value: notifier.selected.any((e2) => e2.key == e.key),
+                          title: Text(e.value),
+                          onChanged: (value) {
+                            if (model.type.isSingleType) {
+                              Navigator.pop(context, SelectionValue({e}));
+                            } else {
+                              notifier.toggle(e);
+                            }
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              if (model.type.isMultiSelectType)
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, SelectionValue(notifier.selected));
+                  },
+                  child: const Text('Done'),
+                ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class DropdownNotifier extends ChangeNotifier {
+  final Set<OptionModel> selected;
+
+  DropdownNotifier(this.selected);
+
+  void toggle(OptionModel e) {
+    if (selected.contains(e)) {
+      selected.remove(e);
+    } else {
+      selected.add(e);
+    }
+    notifyListeners();
   }
 }

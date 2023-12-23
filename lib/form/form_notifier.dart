@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:sdui_flutter_sample/api/api_service.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
 import 'package:sdui_flutter_sample/models/result.dart';
 
@@ -27,7 +26,13 @@ class FormNotifier extends ChangeNotifier {
 
   bool get allFieldsValid => _allFieldsValid;
 
-  final ScrollController scrollController = ScrollController();
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+  final ScrollOffsetListener scrollOffsetListener =
+      ScrollOffsetListener.create();
 
   FormNotifier() {
     getForm();
@@ -41,13 +46,10 @@ class FormNotifier extends ChangeNotifier {
     notifyListeners();
     await Future.delayed(const Duration(seconds: 2));
     _loading = false;
-    final jsonStr =
-        await rootBundle.loadString('assets/json/sample_response.json');
-    final json = jsonDecode(jsonStr) as List;
-    for (var element in json) {
-      final widgetModel = FieldModel.fromJson(element);
-      _modelsMap[widgetModel.key] = widgetModel;
-      _values[widgetModel.key] = widgetModel.defaultValue;
+    final models = await ApiService.getForm();
+    for (final model in models) {
+      _modelsMap[model.key] = model;
+      _values[model.key] = model.defaultValue;
     }
     notifyListeners();
   }
@@ -80,8 +82,9 @@ class FormNotifier extends ChangeNotifier {
       element.setError(null);
     }
     _validate();
-    final hasErrors = _modelsMap.values.any((element) => element.error != null);
-    if (hasErrors) {
+    final field = getFieldWithError();
+    if (field != null) {
+      scrollToField(field);
       return Failure(error: 'Fields have errors');
     }
     return Success(data: getRequestMap());
@@ -99,6 +102,15 @@ class FormNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void scrollToField(FieldModel model) {
+    final index = groups.indexWhere((list) => list.any((element) => element.key == model.key));
+    itemScrollController.scrollTo(
+      index: index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOutCubic,
+    );
+  }
+
   FieldError? _validateField(FieldModel model, FieldValue result) {
     if (!model.mandatory) {
       return null;
@@ -108,6 +120,8 @@ class FormNotifier extends ChangeNotifier {
         ValidationUtils.validateTextField(model, result as TextFieldValue),
       SelectionModel() =>
         ValidationUtils.validateSelection(model, result as SelectionValue),
+      RemoteSelectionModel() => ValidationUtils.validateRemoteSelection(
+          model, result as SelectionValue),
       PasswordConfirmationModel() =>
         ValidationUtils.validateConfirmationPassword(
             model, result as PasswordConfirmationValue),
@@ -115,11 +129,6 @@ class FormNotifier extends ChangeNotifier {
         ValidationUtils.validateDate(model, result as DateFieldValue),
       TextModel() => null,
     };
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void _checkButtonState() {
@@ -132,5 +141,9 @@ class FormNotifier extends ChangeNotifier {
       return error != null;
     });
     _allFieldsValid = !hasErrors;
+  }
+
+  FieldModel? getFieldWithError() {
+    return _modelsMap.values.firstWhereOrNull((element) => element.error != null);
   }
 }

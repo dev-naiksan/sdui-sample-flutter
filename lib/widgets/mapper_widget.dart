@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
 import 'package:sdui_flutter_sample/widgets/dropdown_widget.dart';
 import 'package:sdui_flutter_sample/widgets/password_confirmaton_field_widget.dart';
+import 'package:sdui_flutter_sample/widgets/remote_dropdown_widget.dart';
 import 'package:sdui_flutter_sample/widgets/selection_widget.dart';
 import 'package:sdui_flutter_sample/widgets/text_field_widget.dart';
 
@@ -47,6 +48,13 @@ class MapperWidget extends StatelessWidget {
             error: error as SelectionError?,
           );
         }
+      case RemoteSelectionModel():
+        SelectionValue value = values[model.key] as SelectionValue;
+        return RemoteDropdownField(
+          model: m,
+          fieldValue: value,
+          error: error as SelectionError?,
+        );
       case TextModel():
         TextValue value = values[model.key] as TextValue;
         return TextWidget(model: m);

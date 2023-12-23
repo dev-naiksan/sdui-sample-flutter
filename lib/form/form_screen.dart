@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:flutter_highlight/themes/dracula.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sdui_flutter_sample/form/form_notifier.dart';
 import 'package:sdui_flutter_sample/models/result.dart';
 import 'package:sdui_flutter_sample/widgets/mapper_widget.dart';
@@ -34,12 +35,17 @@ class FormScreen extends StatelessWidget {
                 onNotification: (notification) {
                   return notifier.onNotification(notification);
                 },
-                child: ListView(
-                  controller: notifier.scrollController,
+                child: ScrollablePositionedList.builder(
+                  itemCount: notifier.groups.length,
+                  itemScrollController: notifier.itemScrollController,
+                  scrollOffsetController: notifier.scrollOffsetController,
+                  itemPositionsListener: notifier.itemPositionsListener,
+                  scrollOffsetListener: notifier.scrollOffsetListener,
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
-                  children: notifier.groups.map((list) {
-                    return FieldGroupCard(list: list, values: notifier.values);
-                  }).toList(),
+                  itemBuilder: (context, index) {
+                    return FieldGroupCard(
+                        list: notifier.groups[index], values: notifier.values);
+                  },
                 ),
               );
             },
