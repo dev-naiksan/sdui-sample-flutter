@@ -103,7 +103,8 @@ class FormNotifier extends ChangeNotifier {
   }
 
   void scrollToField(FieldModel model) {
-    final index = groups.indexWhere((list) => list.any((element) => element.key == model.key));
+    final index = groups
+        .indexWhere((list) => list.any((element) => element.key == model.key));
     itemScrollController.scrollTo(
       index: index,
       duration: const Duration(milliseconds: 500),
@@ -127,6 +128,8 @@ class FormNotifier extends ChangeNotifier {
             model, result as PasswordConfirmationValue),
       DateFieldModel() =>
         ValidationUtils.validateDate(model, result as DateFieldValue),
+      PickLocationModel() =>
+        ValidationUtils.validateLocation(model, result as PickLocationValue),
       TextModel() => null,
     };
   }
@@ -144,6 +147,7 @@ class FormNotifier extends ChangeNotifier {
   }
 
   FieldModel? getFieldWithError() {
-    return _modelsMap.values.firstWhereOrNull((element) => element.error != null);
+    return _modelsMap.values
+        .firstWhereOrNull((element) => element.error != null);
   }
 }

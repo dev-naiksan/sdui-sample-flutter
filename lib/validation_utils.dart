@@ -79,6 +79,14 @@ class ValidationUtils {
     }
     return null;
   }
+
+  static PickLocationError? validateLocation(
+      PickLocationModel model, PickLocationValue result) {
+    if (result.value == null) {
+      return PickLocationError('Select location from map');
+    }
+    return null;
+  }
 }
 
 class PasswordValidator {

@@ -74,3 +74,20 @@ class SelectionWidgetNotification extends FieldNotification {
     return 'TextFieldWidgetNotification(key=$key, value=$value)';
   }
 }
+
+class PickLocationNotification extends FieldNotification {
+  @override
+  final String key;
+  @override
+  final PickLocationValue value;
+
+  PickLocationNotification({
+    required this.key,
+    required this.value,
+  });
+
+  @override
+  String toString() {
+    return 'PickLocationNotification(key=$key, value=$value)';
+  }
+}

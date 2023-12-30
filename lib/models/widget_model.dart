@@ -1,6 +1,28 @@
+import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:sdui_flutter_sample/extensions.dart';
 import 'package:sdui_flutter_sample/models/error_model.dart';
+import 'package:sdui_flutter_sample/models/picked_location.dart';
+
+enum WidgetType {
+  text('text'),
+  textField('text_field'),
+  localSelection('local_selection'),
+  remoteSelection('remote_selection'),
+  confirmPassword('password_confirmation'),
+  dateField('date_field'),
+  pickLocation('pick_location'),
+  unknown("unknown");
+
+  final String value;
+
+  const WidgetType(this.value);
+
+  factory WidgetType.fromRaw(String raw) {
+    return WidgetType.values.firstWhereOrNull((e) => e.value == raw) ??
+        WidgetType.unknown;
+  }
+}
 
 sealed class FieldModel {
   String get key;
@@ -18,21 +40,23 @@ sealed class FieldModel {
   void setError(covariant FieldError? e);
 
   static FieldModel fromJson(Map<String, dynamic> json) {
-    final type = json['type'];
+    final type = WidgetType.fromRaw(json['type']);
     switch (type) {
-      case TextFieldModel.widgetType:
-        return TextFieldModel.fromJson(json);
-      case SelectionModel.widgetType:
-        return SelectionModel.fromJson(json);
-      case RemoteSelectionModel.widgetType:
-        return RemoteSelectionModel.fromJson(json);
-      case TextModel.widgetType:
+      case WidgetType.text:
         return TextModel.fromJson(json);
-      case PasswordConfirmationModel.widgetType:
+      case WidgetType.textField:
+        return TextFieldModel.fromJson(json);
+      case WidgetType.localSelection:
+        return SelectionModel.fromJson(json);
+      case WidgetType.remoteSelection:
+        return RemoteSelectionModel.fromJson(json);
+      case WidgetType.confirmPassword:
         return PasswordConfirmationModel.fromJson(json);
-      case DateFieldModel.widgetType:
+      case WidgetType.dateField:
         return DateFieldModel.fromJson(json);
-      default:
+      case WidgetType.pickLocation:
+        return PickLocationModel.fromJson(json);
+      case WidgetType.unknown:
         return TextModel(
           key: 'unknown',
           defaultValue: TextValue('Unknown widget type: $type'),
@@ -86,7 +110,6 @@ class PasswordConfirmationValue extends FieldValue<String> {
 enum TextFieldType { text, email, integer, decimal, password }
 
 class TextFieldModel extends FieldModel {
-  static const widgetType = 'text_field';
 
   @override
   final String key;
@@ -193,7 +216,6 @@ class SelectionValue extends FieldValue<Set<OptionModel>> {
 }
 
 class SelectionModel extends FieldModel {
-  static const widgetType = 'selection';
 
   @override
   final String key;
@@ -260,7 +282,6 @@ class SelectionModel extends FieldModel {
 }
 
 class RemoteSelectionModel extends FieldModel {
-  static const widgetType = 'remote_selection';
 
   @override
   final String key;
@@ -362,7 +383,6 @@ class TextValue extends FieldValue<String> {
 enum TextType { title, subtitle, body }
 
 class TextModel extends FieldModel {
-  static const widgetType = 'text';
 
   @override
   final String key;
@@ -518,6 +538,81 @@ class DateFieldModel extends FieldModel {
 
   @override
   DateFieldError? get error => _error;
+
+  @override
+  bool get isDisplayField => false;
+}
+
+class PickLocationValue extends FieldValue<PickedLocation?> {
+  @override
+  PickedLocation? value;
+
+  PickLocationValue(this.value);
+
+  @override
+  String get raw =>
+      value == null ? "" : "(${value!.latitude},${value!.longitude})";
+}
+
+class PickLocationModel extends FieldModel {
+  static const widgetType = 'pick_location';
+
+  @override
+  final String key;
+  final String placeholder;
+  @override
+  final PickLocationValue defaultValue;
+
+  @override
+  final bool mandatory;
+
+  @override
+  final int groupId;
+
+  PickLocationError? _error;
+
+  @override
+  void setError(PickLocationError? e) {
+    _error = e;
+  }
+
+  static PickLocationValue _getValueFromRaw(String? raw) {
+    if (raw == null) {
+      return PickLocationValue(null);
+    }
+    try {
+      //raw has this form -> 12.34,56.78
+      final list = raw.split(",");
+      final latitude = double.parse(list.first);
+      final longitude = double.parse(list.last);
+      return PickLocationValue(
+        PickedLocation(latitude, longitude),
+      );
+    } catch (_) {
+      return PickLocationValue(null);
+    }
+  }
+
+  factory PickLocationModel.fromJson(Map<String, dynamic> json) {
+    return PickLocationModel(
+      key: json['key'],
+      placeholder: json['placeholder'],
+      defaultValue: _getValueFromRaw(json['initial_value']),
+      mandatory: json['mandatory'] == true,
+      groupId: json['group_id'],
+    );
+  }
+
+  PickLocationModel({
+    required this.key,
+    required this.placeholder,
+    required this.defaultValue,
+    required this.mandatory,
+    required this.groupId,
+  });
+
+  @override
+  PickLocationError? get error => _error;
 
   @override
   bool get isDisplayField => false;

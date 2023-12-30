@@ -24,3 +24,9 @@ class PasswordConfirmationError extends FieldError {
 
   PasswordConfirmationError(this.value1, this.value2);
 }
+
+class PickLocationError extends FieldError {
+  final String? value;
+
+  PickLocationError(this.value);
+}

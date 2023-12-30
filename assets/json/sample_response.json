@@ -100,8 +100,17 @@
     "initial_value": null
   },
   {
+    "key": "location",
+    "type": "pick_location",
+    "subtype": "pick_location",
+    "group_id": 3,
+    "placeholder": "Pick location from the map",
+    "mandatory": true,
+    "initial_value": null
+  },
+  {
     "key": "body_type",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "single",
     "group_id": 4,
     "placeholder": "Select your body type",
@@ -131,7 +140,7 @@
   },
   {
     "key": "interest",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "multi",
     "group_id": 4,
     "placeholder": "Select your interest*",
@@ -157,7 +166,7 @@
   },
   {
     "key": "workout_days",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "multi",
     "group_id": 5,
     "placeholder": "Days on which you workout*",
@@ -203,7 +212,7 @@
   },
   {
     "key": "workouts",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "dropdown_multi",
     "group_id": 5,
     "placeholder": "Your favorite workouts*",
@@ -229,7 +238,7 @@
   },
   {
     "key": "workout_timings",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "dropdown_single",
     "group_id": 5,
     "placeholder": "What time do you workout?*",
