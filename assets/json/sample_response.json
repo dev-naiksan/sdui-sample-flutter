@@ -52,7 +52,7 @@
   },
   {
     "key": "gender",
-    "type": "selection",
+    "type": "local_selection",
     "subtype": "single",
     "group_id": 2,
     "mandatory": true,
@@ -62,7 +62,7 @@
       {
         "key": "male",
         "value": "Male",
-        "selected": true
+        "selected": false
       },
       {
         "key": "female",

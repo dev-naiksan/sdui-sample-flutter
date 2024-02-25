@@ -13,12 +13,12 @@ import 'text_widget.dart';
 
 class MapperWidget extends StatelessWidget {
   final FieldModel model;
-  final Map<String, FieldValue> values;
+  final FieldValue value;
 
   const MapperWidget({
     super.key,
     required this.model,
-    required this.values,
+    required this.value,
   });
 
   @override
@@ -27,59 +27,51 @@ class MapperWidget extends StatelessWidget {
     FieldModel m = model;
     switch (m) {
       case TextFieldModel():
-        TextFieldValue value = values[model.key] as TextFieldValue;
         return TextFieldWidget(
           model: m,
-          fieldValue: value,
+          fieldValue: value as TextFieldValue,
           error: error as TextFieldError?,
         );
       case SelectionModel():
-        SelectionValue value = values[model.key] as SelectionValue;
         if (m.type == SelectionType.dropdownMulti ||
             m.type == SelectionType.dropdownSingle) {
           return DropdownField(
             model: m,
-            fieldValue: value,
+            fieldValue: value as SelectionValue,
             error: error as SelectionError?,
           );
         } else {
           return SelectionWidget(
             model: m,
-            fieldValue: value,
+            fieldValue: value as SelectionValue,
             error: error as SelectionError?,
           );
         }
       case RemoteSelectionModel():
-        SelectionValue value = values[model.key] as SelectionValue;
         return RemoteDropdownField(
           model: m,
-          fieldValue: value,
+          fieldValue: value as SelectionValue,
           error: error as SelectionError?,
         );
       case TextModel():
-        TextValue value = values[model.key] as TextValue;
         return TextWidget(model: m);
 
       case PasswordConfirmationModel():
-        PasswordConfirmationValue value =
-            values[model.key] as PasswordConfirmationValue;
         return PasswordConfirmationWidget(
           model: m,
-          fieldValue: value,
+          fieldValue: value as PasswordConfirmationValue,
           error: error as PasswordConfirmationError?,
         );
       case DateFieldModel():
-        DateFieldValue value = values[model.key] as DateFieldValue;
         return DateInputField(
           model: m,
-          fieldValue: value,
+          fieldValue: value as DateFieldValue,
           error: error as DateFieldError?,
         );
       case PickLocationModel():
-        PickLocationValue value = values[model.key] as PickLocationValue;
         return PickLocationWidget(
           model: m,
-          fieldValue: value,
+          fieldValue: value as PickLocationValue,
           error: error as PickLocationError?,
         );
     }

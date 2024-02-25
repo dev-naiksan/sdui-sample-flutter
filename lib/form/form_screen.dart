@@ -44,7 +44,9 @@ class FormScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
                   itemBuilder: (context, index) {
                     return FieldGroupCard(
-                        list: notifier.groups[index], values: notifier.values);
+                      list: notifier.groups[index],
+                      values: notifier.values,
+                    );
                   },
                 ),
               );
@@ -139,7 +141,7 @@ class FieldGroupCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: MapperWidget(
                   model: model,
-                  values: values,
+                  value: values[model.key]!,
                 ),
               );
             }).toList(),
